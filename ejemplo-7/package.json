@@ -1,0 +1,6 @@
+{
+  "name": "ejemplo-cli",
+  "dependencies": {
+    "inquirer": "^7.3.3"
+  }
+}
