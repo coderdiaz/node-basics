@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const { ApolloServer } = require('apollo-server-express');
 const ExpressPlayground = require('graphql-playground-middleware-express').default;
+const mongoose = require('mongoose');
 
 const schema = require('./schema');
 const resolvers = require('./resolvers');
@@ -16,6 +17,15 @@ const server = new ApolloServer({
 server.applyMiddleware({ app });
 app.get('/playground', ExpressPlayground({ endpoint: '/graphql'}))
 
-app.listen(APP_PORT, () => {
-  console.log(`GraphQL API is listening on port ${APP_PORT}`);
+// mongodb://<host>:<port>@<user>:<password>/<database>
+mongoose.connect(`mongodb://localhost/ecommerce`, {
+  useNewUrlParser: true,
+  useUnifiedTopology:true
+}).then(() => {
+  app.listen(APP_PORT, () => {
+    console.log(`GraphQL API is listening on port ${APP_PORT}`);
+    console.log(`Connected to MongoDB successfully`);
+  });
+}).catch(err => {
+  throw err;
 });
