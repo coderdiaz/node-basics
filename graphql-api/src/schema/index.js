@@ -8,6 +8,9 @@ const typeDefs = gql`
 
   type Mutation {
     createProduct(input: InputCreateProduct!): Product
+    createUser(input: InputCreateUser!): User
+    signup(input: InputSignup!): AuthPayload
+    login(email: String!, password: String!): AuthPayload
   }
 
   type Product {
@@ -18,11 +21,36 @@ const typeDefs = gql`
     featuredImage: String
   }
 
+  type User {
+    _id: ID
+    name: String
+    email: String
+    rol: String
+  }
+
+  type AuthPayload {
+    token: String
+    user: User
+  }
+
   input InputCreateProduct {
     name: String!
     price: Float!
     description: String
     featuredImage: String!
+  }
+
+  input InputCreateUser {
+    email: String!
+    name: String!
+    password: String!
+    rol: String!
+  }
+
+  input InputSignup {
+    email: String!
+    name: String!
+    password: String!
   }
 `;
 
