@@ -4,7 +4,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const Mutation = {
-  createProduct: async (parent, { input }) => {
+  // (parent, args, context)
+  createProduct: async (parent, { input }, { user }) => {
+    if (!user) throw Error('Unauthorized');
+    if (!['admin'].includes(user.rol)) throw Error('Forbidden')
+
     const product = new ProductModel({
       name: input.name,
       price: input.price,
@@ -14,17 +18,20 @@ const Mutation = {
     await product.save();
     return product;
   },
-  createUser: async (parent, { input }) => {
+  createUser: async (parent, { input }, { user }) => {
+    if (!user) throw Error('Unauthorized');
+    if (!['admin'].includes(user.rol)) throw Error('Forbidden')
+
     const encryptedPassword = await bcrypt.hash(input.password, 10);
-    const user = new UserModel({
+    const newUser = new UserModel({
       email: input.email,
       name: input.name,
       password: encryptedPassword,
       rol: input.rol,
     });
 
-    user.save();
-    return user;
+    newUser.save();
+    return newUser;
   },
   signup: async (parent, { input }) => {
     const encryptedPassword = await bcrypt.hash(input.password, 10);
