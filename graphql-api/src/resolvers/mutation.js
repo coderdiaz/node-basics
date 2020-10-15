@@ -43,7 +43,7 @@ const Mutation = {
     });
     user.save();
 
-    const token = jwt.sign({ userId: user._id }, 'secretkey')
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET)
     return {
       token,
       user,
@@ -59,7 +59,7 @@ const Mutation = {
       throw Error('Unauthorized');
     }
 
-    const token = jwt.sign({ userId: user._id }, 'secretkey')
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET)
     return {
       token,
       user,

@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
 const { ApolloServer } = require('apollo-server-express');
@@ -9,7 +11,7 @@ const schema = require('./schema');
 const resolvers = require('./resolvers');
 const { UserModel } = require('./models/User');
 
-const APP_PORT = 3001;
+const APP_PORT = process.env.PORT || 3001;
 
 const server = new ApolloServer({
   typeDefs: schema,
@@ -18,7 +20,7 @@ const server = new ApolloServer({
     let user;
     const token = req.headers.authorization;
     if (token) {
-      const validToken = jwt.verify(token, 'secretkey');
+      const validToken = jwt.verify(token, process.env.JWT_SECRET);
       if (validToken) {
         const { userId } = validToken;
         user = await UserModel.findById(userId);
@@ -33,7 +35,7 @@ server.applyMiddleware({ app });
 app.get('/playground', ExpressPlayground({ endpoint: '/graphql'}))
 
 // mongodb://<host>:<port>@<user>:<password>/<database>
-mongoose.connect(`mongodb://localhost/ecommerce`, {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology:true
 }).then(() => {
