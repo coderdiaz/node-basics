@@ -4,6 +4,21 @@ const typeDefs = gql`
   type Query {
     status: String
     products: [Product]
+    users(
+      page: Int = 1,
+      limit: Int = 10,
+      sort: SortDirection = DESCENDING,
+      sortBy: SortableUserField = createdAt
+    ): [User]
+  }
+
+  enum SortDirection {
+    ASCENDING,
+    DESCENDING
+  }
+
+  enum SortableUserField {
+    createdAt
   }
 
   type Mutation {
@@ -26,6 +41,7 @@ const typeDefs = gql`
     name: String
     email: String
     rol: String
+    createdAt: String
   }
 
   type AuthPayload {

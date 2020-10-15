@@ -8,7 +8,6 @@ const jwt = require('jsonwebtoken');
 const schema = require('./schema');
 const resolvers = require('./resolvers');
 const { UserModel } = require('./models/User');
-const { GraphQLError } = require('graphql');
 
 const APP_PORT = 3001;
 
